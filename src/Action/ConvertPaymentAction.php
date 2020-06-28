@@ -32,6 +32,7 @@ class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
         $details["amount"] = $payment->getTotalAmount() / $divisor;
         $details["currency"] = $payment->getCurrencyCode();
         $details["currencySymbol"] = $currency->alpha3;
+        $details["currencyDigits"] = $currency->exp;
         $details["description"] = $payment->getDescription();
 
         $request->setResult((array) $details);
