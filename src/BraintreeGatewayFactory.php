@@ -1,13 +1,10 @@
 <?php
-namespace Cognito\Braintree;
+namespace Cognito\PayumBraintree;
 
-use Cognito\Braintree\Action\AuthorizeAction;
-use Cognito\Braintree\Action\CancelAction;
-use Cognito\Braintree\Action\ConvertPaymentAction;
-use Cognito\Braintree\Action\CaptureAction;
-use Cognito\Braintree\Action\NotifyAction;
-use Cognito\Braintree\Action\RefundAction;
-use Cognito\Braintree\Action\StatusAction;
+use Cognito\PayumBraintree\Action\ConvertPaymentAction;
+use Cognito\PayumBraintree\Action\CaptureAction;
+use Cognito\PayumBraintree\Action\ObtainNonceAction;
+use Cognito\PayumBraintree\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
@@ -21,13 +18,17 @@ class BraintreeGatewayFactory extends GatewayFactory
         $config->defaults([
             'payum.factory_name' => 'braintree',
             'payum.factory_title' => 'braintree',
-            'payum.action.capture' => new CaptureAction(),
-            'payum.action.authorize' => new AuthorizeAction(),
-            'payum.action.refund' => new RefundAction(),
-            'payum.action.cancel' => new CancelAction(),
-            'payum.action.notify' => new NotifyAction(),
+
+            'payum.template.obtain_nonce' => "@PayumBraintree/Action/obtain_nonce.html.twig",
+
+            'payum.action.capture' => function (ArrayObject $config) {
+                return new CaptureAction($config);
+            },
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
+            'payum.action.obtain_nonce' => function (ArrayObject $config) {
+                return new ObtainNonceAction($config['payum.template.obtain_nonce']);
+            },
         ]);
 
         if (false == $config['payum.api']) {
@@ -43,5 +44,8 @@ class BraintreeGatewayFactory extends GatewayFactory
                 return new Api((array) $config, $config['payum.http_client'], $config['httplug.message_factory']);
             };
         }
+        $payumPaths = $config['payum.paths'];
+        $payumPaths['PayumBraintree'] = __DIR__ . '/Resources/views';
+        $config['payum.paths'] = $payumPaths;
     }
 }

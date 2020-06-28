@@ -1,5 +1,5 @@
 <?php
-namespace Cognito\Braintree\Action;
+namespace Cognito\PayumBraintree\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\GetStatusInterface;
@@ -19,7 +19,23 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        if ($model['error']) {
+            $request->markFailed();
+
+            return;
+        }
+
+        if (false == $model['status'] && false == $model['nonce']) {
+            $request->markNew();
+
+            return;
+        }
+        if ('success' == $model['status']) {
+            $request->markCaptured();
+
+            return;
+        }
+        $request->markUnknown();
     }
 
     /**

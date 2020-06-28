@@ -1,13 +1,16 @@
 <?php
-namespace Cognito\Braintree\Action;
+namespace Cognito\PayumBraintree\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Request\GetCurrency;
 
-class ConvertPaymentAction implements ActionInterface
+class ConvertPaymentAction implements ActionInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
@@ -23,7 +26,15 @@ class ConvertPaymentAction implements ActionInterface
         /** @var PaymentInterface $payment */
         $payment = $request->getSource();
 
-        throw new \LogicException('Not implemented');
+        $details = ArrayObject::ensureArrayObject($payment->getDetails());
+        $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
+        $divisor = pow(10, $currency->exp);
+        $details["amount"] = $payment->getTotalAmount() / $divisor;
+        $details["currency"] = $payment->getCurrencyCode();
+        $details["currencySymbol"] = $currency->alpha3;
+        $details["description"] = $payment->getDescription();
+
+        $request->setResult((array) $details);
     }
 
     /**

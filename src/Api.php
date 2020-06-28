@@ -1,5 +1,5 @@
 <?php
-namespace Cognito\Braintree;
+namespace Cognito\PayumBraintree;
 
 use Http\Message\MessageFactory;
 use Payum\Core\Exception\Http\HttpException;
