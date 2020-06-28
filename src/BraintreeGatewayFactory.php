@@ -1,17 +1,17 @@
 <?php
-namespace Payum\Skeleton;
+namespace Cognito\Braintree;
 
-use Payum\Skeleton\Action\AuthorizeAction;
-use Payum\Skeleton\Action\CancelAction;
-use Payum\Skeleton\Action\ConvertPaymentAction;
-use Payum\Skeleton\Action\CaptureAction;
-use Payum\Skeleton\Action\NotifyAction;
-use Payum\Skeleton\Action\RefundAction;
-use Payum\Skeleton\Action\StatusAction;
+use Cognito\Braintree\Action\AuthorizeAction;
+use Cognito\Braintree\Action\CancelAction;
+use Cognito\Braintree\Action\ConvertPaymentAction;
+use Cognito\Braintree\Action\CaptureAction;
+use Cognito\Braintree\Action\NotifyAction;
+use Cognito\Braintree\Action\RefundAction;
+use Cognito\Braintree\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
-class SkeletonGatewayFactory extends GatewayFactory
+class BraintreeGatewayFactory extends GatewayFactory
 {
     /**
      * {@inheritDoc}
@@ -19,8 +19,8 @@ class SkeletonGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         $config->defaults([
-            'payum.factory_name' => 'skeleton',
-            'payum.factory_title' => 'skeleton',
+            'payum.factory_name' => 'braintree',
+            'payum.factory_title' => 'braintree',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.authorize' => new AuthorizeAction(),
             'payum.action.refund' => new RefundAction(),
