@@ -88,6 +88,7 @@ if ($status->isNew() || $status->isCaptured() || $status->isAuthorized()) {
 } elseif ($status->isFailed() || $status->isCanceled()) {
 	// the payment has failed or user canceled it.
 }
+```
 
 ## License
 
