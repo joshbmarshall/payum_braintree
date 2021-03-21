@@ -1,6 +1,6 @@
 {
     "name": "cognito/payum_braintree",
-    "type": "project",
+    "type": "library",
     "description": "The Payum Braintree payment module",
     "keywords": ["payment"],
     "homepage": "https://payum.forma-pro.com",
